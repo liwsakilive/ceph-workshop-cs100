@@ -87,3 +87,10 @@ ceph-disk zap /dev/sdb
 ```
 ceph osd unset norebalance
 ```
+#### Mount Cephfs
+```
+sudo apt-get install ceph-fuse
+# copy /etc/ceph/ceph.conf from ceph mon to client
+# copy /etc/ceph/ceph.client.admin.keyring from ceph mon to client
+ceph-fuse -m 10.148.0.18 /mnt/cephfs
+```
