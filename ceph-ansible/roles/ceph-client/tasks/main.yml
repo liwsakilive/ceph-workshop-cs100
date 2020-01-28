@@ -1,0 +1,9 @@
+---
+- name: include pre_requisite.yml
+  include: pre_requisite.yml
+
+- name: include create_users_keys.yml
+  include: create_users_keys.yml
+  when:
+    - user_config
+    - ceph_conf_overrides.get('global', {}).get('osd_pool_default_pg_num', False) != False

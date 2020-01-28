@@ -1,0 +1,73 @@
+---
+generate_fsid: false
+fsid: 126f14c4-7fe1-40e4-94eb-9240b63de5c1 # Replace with your generated UUID
+
+monitor_address_block: "10.148.0.0/24"
+radosgw_address_block: "10.148.0.0/24"
+public_network: "10.148.0.0/24"
+cluster_network: "10.148.0.0/24"
+osd_scenario: 'collocated'
+osd_objectstore: bluestore
+
+# For Debian & Red Hat/CentOS installs set TCMALLOC_MAX_TOTAL_THREAD_CACHE_BYTES
+# Set this to a byte value (e.g. 134217728)
+# A value of 0 will leave the package default.
+ceph_tcmalloc_max_total_thread_cache: 134217728  #128MB
+
+###########
+# GENERAL #
+###########
+#fetch_directory: /etc/openstack_deploy/fetch/ 
+
+##########
+# VERSION
+##########
+# COMMUNITY VERSION
+ceph_stable: true # use ceph stable branch
+# ceph_stable_key: https://download.ceph.com/keys/release.asc
+ceph_stable_release: luminous # ceph stable release
+# ceph_stable_repo: "http://mirror.nipa.cloud/ceph/debian-{{ ceph_stable_release }}"
+
+###################
+# CONFIG OVERRIDE #เป็นการกำหนด configuration ที่นอกเหนือจากการใช้ var ของ ceph-ansible
+###################
+#Tuning refer to http://lists.ceph.com/pipermail/ceph-users-ceph.com/2016-February/007569.html
+#osd_mount_options_xfs: "rw,relatime,inode64,logbsize=256k,delaylog,allocsize=4M"
+osd_pool_default_pg_num: 128
+ceph_conf_overrides:
+  global:
+    mon_pg_warn_max_per_osd: 0
+    osd_pool_default_size: 1
+    osd_pool_default_min_size: 1
+    mon_max_pg_per_osd: 200
+  mon:
+    mon_allow_pool_delete: true
+    mgr_initial_modules: balancer dashboard prometheus
+  osd:
+    osd_max_backfills: 1
+    osd_recovery_max_active: 1
+    osd_recovery_op_priority: 1  
+    osd_scrub_begin_hour: 2
+    osd_scrub_end_hour: 5
+    osd_scrub_load_threshold: 0.25 #Ceph will not scrub when the system load
+
+###################
+#      CRUSH      #
+###################   
+# crush_rule_config: true
+
+# crush_rule_hdd:
+#   name: HDD
+#   root: HDD
+#   type: host
+#   default: true
+
+# crush_rule_ssd:
+#   name: SSD
+#   root: SSD
+#   type: host
+#   default: false
+
+# crush_rules:
+#   - "{{ crush_rule_hdd }}"
+#   - "{{ crush_rule_ssd }}"
